@@ -54,7 +54,6 @@ normaliser.adapt(np.array(trainX))
 intial = np.array(trainX[0][0])
 with np.printoptions(precision=2, suppress=True):
   print('First example:', intial)
-  print()
   print('Normalized:', normaliser(intial).numpy())
   
 # define function to plot training loss
