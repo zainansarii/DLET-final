@@ -1,0 +1,81 @@
+import numpy as np
+import pandas as pd      
+import tensorflow as tf
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+
+from tensorflow import keras
+from tensorflow.keras import layers
+from tensorflow.keras.layers.experimental import preprocessing
+
+# import data and drop ID column
+df_train = pd.read_csv('demand_data.csv')
+df_train = df_train.drop(['id'], axis=1)
+df_train.head(5)
+
+# check for missing values and drop rows containing NaNs
+df_train.isnull().sum()
+df_train = df_train.dropna()
+
+# split training and testing data 80:20 chronologically
+train_dataset = df_train.head(int(len(df_train)*(0.8)))
+test_dataset = df_train.tail(int(len(df_train)*(0.2)))
+df_train.describe().transpose()
+
+# split features from labels in both training and testing datasets
+train_features = train_dataset.copy()
+test_features = test_dataset.copy()
+train_labels = train_features.pop('rsd')
+test_labels = test_features.pop('rsd')
+
+# instantiate normaliser and adapt to training data
+normaliser = preprocessing.Normalization(axis=-1)
+normaliser.adapt(np.array(train_features))
+
+initial = np.array(train_features[:1])
+with np.printoptions(precision=2, suppress=True):
+  print('Non-normalised', initial)
+  print('Normalised:', normaliser(initial).numpy())
+  
+# define function to plot training loss
+def plot_loss(history):
+  plt.plot(history.history['loss'], label='loss')
+  plt.plot(history.history['val_loss'], label='val_loss')
+  plt.ylim([0, 15000])
+  plt.xlabel('Epoch')
+  plt.ylabel('Error [output]')
+  plt.legend()
+  plt.grid(True)
+  
+# define function to build and compile neural network
+def build_and_compile_model(normaliser):
+  model = keras.Sequential([
+      normaliser,
+      layers.Dense(50, activation='relu'),
+      layers.Dense(50, activation='relu'),
+      layers.Dense(1)
+  ])
+  model.compile(loss='mean_absolute_error',
+                optimizer=tf.keras.optimizers.Adam(0.001))
+  return model
+
+# build and compile neural network
+dnn_model = build_and_compile_model(normaliser)
+dnn_model.summary()
+
+# train model and plot loss
+history = dnn_model.fit(
+    train_features, train_labels,
+    validation_split=0.2, epochs=50)
+plot_loss(history)
+
+# evaluate model performance on test data
+performance = dnn_model.evaluate(test_features, test_labels, verbose=0)
+print('Mean absolute error [demand] = ' + performance)
+
+# make predictions to be used in niv_FFNN.py
+test_predictions = dnn_model.predict(df_train.drop('rsd', axis=1)).flatten()
+test_predictions_list = test_predictions.tolist()
+df_predicted_demand = pd.DataFrame({'predicteddemand':test_predictions_list})
+df_predicted_demand.to_csv("predictions.csv", index=False)
