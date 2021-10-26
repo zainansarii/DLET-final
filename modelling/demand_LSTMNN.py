@@ -45,7 +45,6 @@ trainX, trainY = np.array(trainX), np.array(trainY)
 for i in range(timesteps, len(test_dataset) - future_pred + 1):
   testX.append(test_features[i - timesteps:i])
   testY.append(test_labels[i + future_pred - 2:i + future_pred - 1])
-
 testX, testY = np.array(testX), np.array(testY)
 
 # instantiate normaliser and adapt to training data
