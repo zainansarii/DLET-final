@@ -52,8 +52,8 @@ def plot_loss(history):
 def build_and_compile_model(normaliser):
   model = keras.Sequential([
       normaliser,
-      layers.Dense(100, activation='relu'),
-      layers.Dense(100, activation='relu'),
+      layers.Dense(50, activation='relu'),
+      layers.Dense(50, activation='relu'),
       layers.Dense(1)
   ])
   model.compile(loss='mean_absolute_error',
@@ -67,7 +67,7 @@ dnn_model.summary()
 # train model and plot loss
 history = dnn_model.fit(
     train_features, train_labels,
-    validation_split=0.2, epochs=50)
+    validation_split=0.2, epochs=100)
 plot_loss(history)
 
 # evaluate model performance on test data
