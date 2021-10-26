@@ -52,8 +52,8 @@ def plot_loss(history):
 def build_and_compile_model(normaliser):
   model = keras.Sequential([
       normaliser,
-      layers.Dense(50, activation='relu'),
-      layers.Dense(50, activation='relu'),
+      layers.Dense(100, activation='relu'),
+      layers.Dense(100, activation='relu'),
       layers.Dense(1)
   ])
   model.compile(loss='mean_absolute_error',
