@@ -54,7 +54,7 @@ for i in range(8):
     s4 = end_demand_test_date.strftime("%y%m%d") + "48"
     end_demand_test_arr.append(int(s4))
 
-    s5 = start_niv_train_date.strftime("%y%m%d") + "02"
+    s5 = start_niv_train_date.strftime("%y%m%d") + "04"
     start_niv_train_arr.append(int(s5))
 
     s6 = end_niv_train_date.strftime("%y%m%d") + "48"
@@ -66,7 +66,7 @@ for i in range(8):
     s8 = end_niv_test_date.strftime("%y%m%d") + "47"
     end_niv_test_arr.append(int(s8))
 
-    s9 = start_trade_date.strftime("%y%m%d") + "04"
+    s9 = start_trade_date.strftime("%y%m%d") + "02"
     start_trade_arr.append(int(s9))
 
     s10 = end_trade_date.strftime("%y%m%d") + "44"
@@ -152,7 +152,7 @@ for z in range(8):
         trainX, trainY,
         validation_split=0.2, epochs=200, verbose=0)
     
-    print("Demand loss: " + model.evaluate(testX, testY, verbose=0))
+    print("Demand loss: " + str(model.evaluate(testX, testY, verbose=0)))
     test_predictions = model.predict(testX).flatten().tolist()
 
     # read in NIV and trading data with missing values imputed
@@ -228,7 +228,7 @@ for z in range(8):
         validation_split=0.2, epochs=20, verbose=0)
     
     # make NIV predictions and feed into trading dataframe
-    print("NIV loss: " + model.evaluate(testX, testY, verbose=0))
+    print("NIV loss: " + str(model.evaluate(testX, testY, verbose=0)))
     test_predictions = model.predict(testX).flatten().tolist()
     df_trade['nivt+2'] = test_predictions
     df_trade = df_trade.dropna()
