@@ -13,6 +13,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental import preprocessing
 
 # initialise arrays filled with training/testing dates over an 8 week window
+# in this case, TSL = 3 months
 one = dt.date(2019,10,1)
 two = dt.date(2019,12,31)
 three = dt.date(2020,1,7)
@@ -62,7 +63,7 @@ print(end_niv_test)
 
 for z in range(8):
   
-  # read in demand data
+  # read in demand data with missing values removed
   df_demand = pd.read_csv('demand_data.csv')
 
   # select data between relevent time indexes from full demand dataset
@@ -102,10 +103,10 @@ for z in range(8):
       train_features, train_labels,
       validation_split=0.2, epochs=100, verbose=0)
 
-  print("Demand loss: " + dnn_model.evaluate(test_features, test_labels, verbose=0))
+  print("Demand loss: " + str(dnn_model.evaluate(test_features, test_labels, verbose=0)))
   test_predictions = dnn_model.predict(test_features).flatten().tolist()
 
-  # read in NIV and trading data
+  # read in NIV data (with missing values removed) and trading data
   df_niv = pd.read_csv('niv_data.csv')
   df_trade = df_niv[['indexpricet+2','imbalancepricet+2']]
 
@@ -150,7 +151,7 @@ for z in range(8):
       validation_split=0.2, epochs=50, verbose=0)
 
   # make NIV predictions and feed into trading dataframe
-  print("NIV loss: " + dnn_model.evaluate(test_features, test_labels, verbose=0))
+  print("NIV loss: " + str(dnn_model.evaluate(test_features, test_labels, verbose=0)))
   test_predictions = dnn_model.predict(test_features).flatten().tolist()
   df_trade['nivt+2'] = test_predictions
   df_trade = df_trade.dropna()
