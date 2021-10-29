@@ -68,7 +68,7 @@ def plot_loss(history):
   
 # build and compile neural network
 model = keras.Sequential()
-model.add(normalizer)
+model.add(normaliser)
 model.add(layers.LSTM(32, activation='relu', input_shape=(trainX.shape[1], trainX.shape[2]), return_sequences=True))
 model.add(layers.LSTM(64, activation='relu', return_sequences=True))
 model.add(layers.LSTM(128, activation='relu', return_sequences=True))
