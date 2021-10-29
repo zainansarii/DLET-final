@@ -10,7 +10,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental import preprocessing
 
 # import data and drop ID column
-df_train = pd.read_csv('demand_data.csv')
+df_train = pd.read_excel('demand_data.xlsx')
 df_train = df_train.drop(['id'], axis=1)
 df_train.head(5)
 
@@ -67,12 +67,12 @@ dnn_model.summary()
 # train model and plot loss
 history = dnn_model.fit(
     train_features, train_labels,
-    validation_split=0.2, epochs=100)
+    validation_split=0.2, epochs=10)
 plot_loss(history)
 
 # evaluate model performance on test data
 performance = dnn_model.evaluate(test_features, test_labels, verbose=0)
-print('Mean absolute error [demand] = ' + performance)
+print('Mean absolute error [demand] = ' + str(performance))
 
 # make predictions to be used in niv_FFNN.py
 test_predictions = dnn_model.predict(df_train.drop('rsd', axis=1)).flatten()
