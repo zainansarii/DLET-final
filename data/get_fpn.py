@@ -44,6 +44,12 @@ for j in range(365):
 
         #remove duplicates
         df = df.drop_duplicates(subset=['2'], keep='last')
+        
+        ######## FOR INTERCONNECTOR FPN #########
+        #for index, row in df.iterrows():
+        #   if "I_" not in row['2']:
+        #       df = df.drop(index)
+        #########################################
                 
         #sum period fpn for each unit and write to fpn.csv
         period_fpn = []
