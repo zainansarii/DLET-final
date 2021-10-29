@@ -68,7 +68,7 @@ def plot_loss(history):
   
 # build and compile neural network
 model = keras.Sequential()
-model.add(normalizer)
+model.add(normaliser)
 model.add(layers.LSTM(32, activation='relu', input_shape=(trainX.shape[1], trainX.shape[2]), return_sequences=True))
 model.add(layers.LSTM(64, activation='relu', return_sequences=True))
 model.add(layers.LSTM(128, activation='relu', return_sequences=True))
@@ -88,8 +88,9 @@ plot_loss(history)
 
 # evaluate model performance on test data
 performance = model.evaluate(testX, testY, verbose=0)
-print('Mean absolute error [niv] = ' + performance)
+print('Mean absolute error [niv] = ' + str(performance))
 
 # make predictions to be used in trading algorithm
 test_predictions = model.predict(testX).flatten()
-pd.DataFrame(test_predictions).to_csv("predictions.csv")
+df_demand = pd.DataFrame({'demand':test_predictions.tolist()})
+df_demand.to_csv("niv_predictions.csv", index=False)
