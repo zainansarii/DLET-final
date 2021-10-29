@@ -24,7 +24,7 @@ for i in range(365):
             outfile.write(infile.readline())
     cdate = cdate + delta
 
-# clean data
+# clean and store data
 df = pd.read_csv("temp1.csv")
 df = df[~df[' code'].str.contains("N2EXMIDP")]
 df[' price'].to_csv("mip.csv", index=False)
