@@ -10,7 +10,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental import preprocessing
 
 # import data and drop ID column
-df_train = pd.read_csv('demand_data.csv')
+df_train = pd.read_excel('demand_data.xlsx')
 df_train = df_train.drop(['id'], axis=1)
 df_train.head(5)
 
@@ -82,15 +82,14 @@ model.summary()
 # train model and plot loss
 history = model.fit(
     trainX, trainY,
-    validation_split=0.2, epochs=200)
+    validation_split=0.2, epochs=1)
 plot_loss(history)
 
 # evaluate model performance on test data
 performance = model.evaluate(testX, testY, verbose=0)
-print('Mean absolute error [demand] = ' + performance)
+print('Mean absolute error [demand] = ' + str(performance))
 
 # make predictions to be used in niv_LSTMNN.py
 test_predictions = model.predict(testX).flatten()
-f = open("predictions.csv", "w")
-f.write(test_predictions)
-
+df_demand = pd.DataFrame({'demand':test_predictions.tolist()})
+df_demand.to_csv("predictions.csv", index=False)
