@@ -72,7 +72,7 @@ plot_loss(history)
 
 # evaluate model performance on test data
 performance = dnn_model.evaluate(test_features, test_labels, verbose=0)
-print('Mean absolute error [niv] = ' + performance)
+print('Mean absolute error [niv] = ' + str(performance))
 
 # make predictions to be used in trading algorithm
 test_predictions = dnn_model.predict(test_features).flatten()
