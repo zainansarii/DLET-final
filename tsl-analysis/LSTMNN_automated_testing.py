@@ -13,6 +13,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental import preprocessing
 
 # initialise arrays filled with training/testing dates over an 8 week window
+# in this case, TSL = 6 months
 
 #demand indexing
 start_demand_train_date = dt.date(2019,6,1)
