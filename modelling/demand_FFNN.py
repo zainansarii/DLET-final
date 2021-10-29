@@ -10,7 +10,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.layers.experimental import preprocessing
 
 # import data and drop ID column
-df_train = pd.read_excel('demand_data.xlsx')
+df_train = pd.read_csv('demand_data.csv')
 df_train = df_train.drop(['id'], axis=1)
 df_train.head(5)
 
